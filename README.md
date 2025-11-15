@@ -197,7 +197,7 @@ This will create:
 - 👨‍💼 **Restaurant managers**: `manager1@foodie.com` to `manager18@foodie.com` / `manager123`
 - 🏪 **18 restaurants**
 - 📁 **15 categories**
-- 🍛 **100+ South Indian dishes** (50% Veg, 50% Non-Veg)
+- 🍛 **100+ South Indian dishes** 
 - 🎟️ **Sample promo codes**
 
 #### 6️⃣ Start Development Servers
