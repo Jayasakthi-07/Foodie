@@ -256,14 +256,32 @@ const AdminDashboard = () => {
             <h2 className="text-xl font-bold mb-4">Top Selling Dishes</h2>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart
-                data={stats.topDishes.slice(0, 10)}
+                data={stats.topDishes.slice(0, 10).map(dish => ({
+                  ...dish,
+                  dishName: dish.dishName.replace(/\s*-\s*/g, ' - ').trim()
+                }))}
                 layout="vertical"
-                margin={{ top: 5, right: 30, left: 100, bottom: 5 }}
+                margin={{ top: 5, right: 30, left: 120, bottom: 5 }}
               >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis type="number" />
-                <YAxis dataKey="dishName" type="category" width={80} />
-                <Tooltip formatter={(value) => value} />
+                <YAxis 
+                  dataKey="dishName" 
+                  type="category" 
+                  width={120}
+                  tick={{ fontSize: 12, fill: 'currentColor' }}
+                  angle={0}
+                  textAnchor="end"
+                  interval={0}
+                />
+                <Tooltip 
+                  formatter={(value) => value}
+                  contentStyle={{ 
+                    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                    border: '1px solid #ccc',
+                    borderRadius: '4px'
+                  }}
+                />
                 <Legend />
                 <Bar dataKey="totalQuantity" fill="#f97316" name="Quantity Sold" />
               </BarChart>
