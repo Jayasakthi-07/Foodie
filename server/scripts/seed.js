@@ -949,7 +949,7 @@ const seed = async () => {
       name: 'Admin User',
       email: 'admin@foodie.com',
       password: 'Foodie@2025', // Will be hashed by pre-save hook
-      phone: '9876543210',
+      phone: '6379555329',
       role: 'admin',
       wallet: 10000,
       isEmailVerified: true,

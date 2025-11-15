@@ -11,6 +11,7 @@
     "dev": "nodemon server.js",
     "seed": "node scripts/seed.js",
     "update-admin-password": "node scripts/update-admin-password.js",
+    "update-admin-phone": "node scripts/update-admin-phone.js",
     "update-user-names": "node scripts/update-user-names.js",
     "update-manager-names": "node scripts/update-manager-names.js",
     "update-dish-veg-status": "node scripts/update-dish-veg-status.js",
