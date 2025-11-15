@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore } from '../../store/authStore';
 import { useCartStore } from '../../store/cartStore';
 import { useThemeStore } from '../../store/themeStore';
-import { FiShoppingCart, FiUser, FiLogOut, FiSun, FiMoon, FiMenu, FiX } from 'react-icons/fi';
+import { FiShoppingCart, FiUser, FiLogOut, FiSun, FiMoon, FiMenu, FiX, FiAlertCircle } from 'react-icons/fi';
 import { formatCurrency } from '../../utils/formatCurrency';
 
 const Navbar = () => {
@@ -14,11 +14,21 @@ const Navbar = () => {
   const { theme, toggleTheme } = useThemeStore();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
-  const handleLogout = async () => {
+  const handleLogoutClick = () => {
+    setShowLogoutConfirm(true);
+    setIsUserMenuOpen(false);
+  };
+
+  const handleLogoutConfirm = async () => {
+    setShowLogoutConfirm(false);
     await logout();
     navigate('/');
-    setIsUserMenuOpen(false);
+  };
+
+  const handleLogoutCancel = () => {
+    setShowLogoutConfirm(false);
   };
 
   const cartItems = getTotalItems();
@@ -145,7 +155,7 @@ const Navbar = () => {
                         </Link>
                       ) : null}
                       <button
-                        onClick={handleLogout}
+                        onClick={handleLogoutClick}
                         className="w-full text-left px-4 py-3 text-red-600 dark:text-red-400 hover:bg-charcoal-100 dark:hover:bg-charcoal-700 transition-colors flex items-center space-x-2"
                       >
                         <FiLogOut className="w-4 h-4" />
@@ -239,6 +249,65 @@ const Navbar = () => {
           )}
         </AnimatePresence>
       </div>
+
+      {/* Logout Confirmation Modal */}
+      <AnimatePresence>
+        {showLogoutConfirm && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={handleLogoutCancel}
+              className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
+            >
+              {/* Modal */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                onClick={(e) => e.stopPropagation()}
+                className="bg-white dark:bg-charcoal-800 rounded-xl shadow-2xl max-w-md w-full p-6 border border-charcoal-200 dark:border-charcoal-700"
+              >
+                <div className="flex items-center space-x-3 mb-4">
+                  <div className="flex-shrink-0 w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
+                    <FiAlertCircle className="w-6 h-6 text-red-600 dark:text-red-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-charcoal-900 dark:text-charcoal-100">
+                      Confirm Logout
+                    </h3>
+                    <p className="text-sm text-charcoal-600 dark:text-charcoal-400">
+                      Are you sure you want to logout?
+                    </p>
+                  </div>
+                </div>
+
+                <p className="text-charcoal-700 dark:text-charcoal-300 mb-6">
+                  You will need to login again to access your account and place orders.
+                </p>
+
+                <div className="flex space-x-3">
+                  <button
+                    onClick={handleLogoutCancel}
+                    className="flex-1 px-4 py-2.5 rounded-lg border border-charcoal-300 dark:border-charcoal-600 text-charcoal-700 dark:text-charcoal-300 hover:bg-charcoal-100 dark:hover:bg-charcoal-700 transition-colors font-medium"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleLogoutConfirm}
+                    className="flex-1 px-4 py-2.5 rounded-lg bg-red-600 hover:bg-red-700 text-white transition-colors font-medium flex items-center justify-center space-x-2"
+                  >
+                    <FiLogOut className="w-4 h-4" />
+                    <span>Logout</span>
+                  </button>
+                </div>
+              </motion.div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </nav>
   );
 };
