@@ -16,6 +16,7 @@
     "update-manager-names": "node scripts/update-manager-names.js",
     "update-dish-veg-status": "node scripts/update-dish-veg-status.js",
     "update-dish-names": "node scripts/update-dish-names-for-veg.js",
+    "generate-activity": "node scripts/generate-past-activity.js",
     "fix-indexes": "node scripts/fix-indexes.js",
     "fix-orders": "node scripts/fix-order-numbers.js",
     "kill-port": "node scripts/kill-port.js"
