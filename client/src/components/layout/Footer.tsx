@@ -98,7 +98,7 @@ const Footer = () => {
                 <FiInstagram className="w-5 h-5" />
               </a>
               <a
-                href="#"
+                href="mailto:jayasakthidharmarajan@gmail.com"
                 className="w-10 h-10 rounded-full bg-charcoal-800 flex items-center justify-center hover:bg-saffron-500 transition-colors"
                 aria-label="Email"
               >
