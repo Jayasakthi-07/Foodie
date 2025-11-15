@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --toast-bg: #1f2937;
+  --toast-color: #f9fafb;
+}
+
+[data-theme='dark'] {
+  --toast-bg: #1f2937;
+  --toast-color: #f9fafb;
+}
+
+[data-theme='light'] {
+  --toast-bg: #ffffff;
+  --toast-color: #111827;
+}
+
+@layer base {
+  * {
+    @apply border-charcoal-200 dark:border-charcoal-700;
+  }
+
+  body {
+    @apply bg-white dark:bg-charcoal-900 text-charcoal-900 dark:text-charcoal-50 transition-colors duration-200;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-saffron-500 hover:bg-saffron-600 text-white font-semibold py-2 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none;
+  }
+
+  .btn-secondary {
+    @apply bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none;
+  }
+
+  .btn-outline {
+    @apply border-2 border-saffron-500 text-saffron-500 hover:bg-saffron-500 hover:text-white font-semibold py-2 px-6 rounded-lg transition-all duration-200;
+  }
+
+  .card {
+    @apply bg-white dark:bg-charcoal-800 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 rounded-lg border-2 border-charcoal-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 text-charcoal-900 dark:text-charcoal-50 focus:outline-none focus:ring-2 focus:ring-saffron-500 focus:border-transparent transition-all duration-200;
+  }
+
+  .glass {
+    @apply bg-white/80 dark:bg-charcoal-800/80 backdrop-blur-lg border border-charcoal-200/50 dark:border-charcoal-700/50;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-charcoal-100 dark:bg-charcoal-800;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-charcoal-400 dark:bg-charcoal-600 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-charcoal-500 dark:bg-charcoal-500;
+}
+
+/* Animated gradient for orange theme */
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes gradient-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes color-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animated-gradient {
+  background: linear-gradient(-45deg, #FF8000, #FF9933, #FF6600, #FF9900, #FF8000);
+  background-size: 400% 400%;
+  animation: gradient-shift 8s ease infinite;
+}
+
+.animated-gradient-text {
+  background: linear-gradient(-45deg, #FF8000, #FF9933, #FF6600, #FF9900, #FF8000);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-shift 8s ease infinite;
+}
+

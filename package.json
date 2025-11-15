@@ -1,0 +1,32 @@
+{
+  "name": "foodie",
+  "version": "1.0.0",
+  "description": "Foodie - South Indian Cuisine MERN Stack Application",
+  "scripts": {
+    "setup": "npm install && cd server && npm install && cd ../client && npm install",
+    "install:server": "cd server && npm install",
+    "install:client": "cd client && npm install",
+    "install:all": "npm install && npm run install:server && npm run install:client",
+    "dev:server": "cd server && npm run dev",
+    "dev:client": "cd client && npm run dev",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\" --names \"SERVER,CLIENT\" --prefix-colors \"cyan,yellow\"",
+    "start": "npm run dev",
+    "kill-port": "powershell -ExecutionPolicy Bypass -File kill-port.ps1",
+    "clean-start": "powershell -ExecutionPolicy Bypass -Command \"Get-NetTCPConnection -LocalPort 5000 -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue }; Start-Sleep -Seconds 2; npm run dev\"",
+    "seed": "cd server && npm run seed",
+    "build": "cd client && npm run build"
+  },
+  "keywords": [
+    "food",
+    "south-indian",
+    "mern",
+    "react",
+    "express",
+    "mongodb"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
