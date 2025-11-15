@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { FiFacebook, FiTwitter, FiInstagram, FiMail } from 'react-icons/fi';
+import { FiTwitter, FiInstagram, FiMail } from 'react-icons/fi';
 
 const Footer = () => {
   return (
@@ -72,13 +72,6 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-semibold mb-4 text-white">Follow Us</h4>
             <div className="flex space-x-4">
-              <a
-                href="#"
-                className="w-10 h-10 rounded-full bg-charcoal-800 flex items-center justify-center hover:bg-saffron-500 transition-colors"
-                aria-label="Facebook"
-              >
-                <FiFacebook className="w-5 h-5" />
-              </a>
               <a
                 href="https://x.com/jayasakthi_"
                 target="_blank"
