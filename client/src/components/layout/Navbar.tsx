@@ -41,7 +41,7 @@ const Navbar = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <img 
-              src="/assets/Black and Yellow Kitchenware Icon Food Logo.svg" 
+              src="/logo.svg" 
               alt="Foodie Logo" 
               className="w-10 h-10"
             />
