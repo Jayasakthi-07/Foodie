@@ -87,7 +87,9 @@ const Footer = () => {
                 <FiTwitter className="w-5 h-5" />
               </a>
               <a
-                href="#"
+                href="https://www.instagram.com/sev7en.exe/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-charcoal-800 flex items-center justify-center hover:bg-saffron-500 transition-colors"
                 aria-label="Instagram"
               >
