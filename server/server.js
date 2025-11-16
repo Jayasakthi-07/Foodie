@@ -1,12 +1,21 @@
+// Load environment variables FIRST before any other imports
+import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+import path from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Load .env file with explicit path
+dotenv.config({ path: path.join(__dirname, '.env') });
+
+// Now import other modules
 import express from 'express';
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
-import path from 'path';
-import { fileURLToPath } from 'url';
 
 // Import routes
 import authRoutes from './routes/auth.routes.js';
@@ -24,12 +33,6 @@ import { setSocketIO as setOrderSocketIO } from './controllers/order.controller.
 import { setSocketIO as setAdminSocketIO } from './controllers/admin.controller.js';
 import { setSocketIO as setAutoProgressSocketIO, startOrderAutoProgress } from './services/orderAutoProgress.service.js';
 import { setSocketIO as setScheduledOrdersSocketIO, startScheduledOrdersProcessor } from './services/scheduledOrders.service.js';
-
-// Load environment variables
-dotenv.config();
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const app = express();
 const httpServer = createServer(app);

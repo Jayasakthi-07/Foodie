@@ -3,6 +3,13 @@ import User from '../models/User.model.js';
 
 export const authenticate = async (req, res, next) => {
   try {
+    if (!process.env.JWT_SECRET) {
+      return res.status(500).json({
+        success: false,
+        message: 'Server configuration error: JWT_SECRET is not configured',
+      });
+    }
+
     const token = req.cookies?.accessToken || 
                  req.headers?.authorization?.replace('Bearer ', '');
 
