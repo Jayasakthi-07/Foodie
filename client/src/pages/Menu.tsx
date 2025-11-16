@@ -3,6 +3,7 @@ import { useSearchParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import api from '../utils/api';
 import { formatCurrency } from '../utils/formatCurrency';
+import { getImageUrl } from '../utils/getImageUrl';
 import { useCartStore } from '../store/cartStore';
 import toast from 'react-hot-toast';
 import { FiSearch, FiFilter, FiStar, FiClock, FiShoppingCart } from 'react-icons/fi';
@@ -91,8 +92,18 @@ const Menu = () => {
         if (dishesRes.data.data.pagination) {
           setPagination(dishesRes.data.data.pagination);
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error fetching data:', error);
+        if (error.response) {
+          console.error('API Error:', error.response.data);
+          toast.error(error.response.data?.message || 'Failed to load dishes');
+        } else if (error.request) {
+          console.error('Network Error:', error.request);
+          toast.error('Cannot connect to server. Please check your connection.');
+        } else {
+          console.error('Error:', error.message);
+          toast.error('An error occurred while loading dishes');
+        }
       } finally {
         setLoading(false);
       }
@@ -305,7 +316,7 @@ const Menu = () => {
                 <Link to={`/dish/${dish._id}`} className="block">
                   <div className="relative h-48 overflow-hidden">
                     <img
-                      src={dish.image || 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=800'}
+                      src={getImageUrl(dish.image) || 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=800'}
                       alt={dish.name}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                     />

@@ -139,14 +139,21 @@ npm install
 
 #### 3️⃣ Environment Setup
 
+**Server Configuration:**
+
 Create a `.env` file in the `server` directory:
 
 ```env
 # Server Configuration
 PORT=5000
 NODE_ENV=development
+# Set to '0.0.0.0' to accept connections from other devices on your network
+HOST=0.0.0.0
 
 # Database
+# For local MongoDB: mongodb://localhost:27017/foodie
+# For remote MongoDB: mongodb://username:password@host:port/database
+# For MongoDB Atlas: mongodb+srv://username:password@cluster.mongodb.net/database
 MONGODB_URI=mongodb://localhost:27017/foodie
 
 # JWT Configuration
@@ -155,7 +162,10 @@ JWT_REFRESH_SECRET=your_super_secret_refresh_jwt_key_change_this_in_production
 JWT_EXPIRE=15m
 JWT_REFRESH_EXPIRE=7d
 
-# Client Configuration
+# CORS Configuration
+# For single client: CLIENT_URL=http://localhost:5173
+# For multiple clients: CLIENT_URL=http://localhost:5173,http://192.168.1.100:5173
+# In development mode, all origins are allowed for easier network access
 CLIENT_URL=http://localhost:5173
 
 # File Upload
@@ -164,6 +174,20 @@ MAX_FILE_SIZE=5242880
 ```
 
 > 💡 **Tip**: Copy `server/env.example` to `server/.env` and update the values.
+
+**Client Configuration (Optional - for network access):**
+
+Create a `.env` file in the `client` directory (optional, only needed for network access):
+
+```env
+# API URL for connecting to the backend server
+# For local development: http://localhost:5000
+# For network access: http://YOUR_IP_ADDRESS:5000
+# Example: http://192.168.1.100:5000
+VITE_API_URL=http://localhost:5000
+```
+
+> 💡 **Note**: If you're only using on the same machine, you don't need the client `.env` file.
 
 #### 4️⃣ Start MongoDB
 
@@ -217,6 +241,78 @@ npm run dev
 🌐 Client runs on: `http://localhost:5173`
 
 > 🎉 **Success!** Open `http://localhost:5173` in your browser to see the application.
+
+#### 7️⃣ Access from Other Devices (Network Setup)
+
+To access the application from other devices on your network (phones, tablets, other laptops):
+
+**Step 1: Find Your IP Address**
+
+**Windows:**
+```bash
+ipconfig
+# Look for "IPv4 Address" under your active network adapter
+# Example: 192.168.1.100
+```
+
+**macOS/Linux:**
+```bash
+ifconfig
+# or
+ip addr show
+# Look for your local IP address (usually starts with 192.168.x.x or 10.x.x.x)
+```
+
+**Step 2: Update Server Configuration**
+
+Ensure your `server/.env` has:
+```env
+HOST=0.0.0.0
+CLIENT_URL=http://localhost:5173
+# Or add multiple URLs: CLIENT_URL=http://localhost:5173,http://192.168.1.100:5173
+```
+
+**Step 3: Update Client Configuration (if accessing from other devices)**
+
+On the device running the client, create `client/.env`:
+```env
+# Replace 192.168.1.100 with YOUR server's IP address
+# This tells the client where to find the backend API
+VITE_API_URL=http://192.168.1.100:5000
+```
+
+> ⚠️ **Important**: After creating or updating `client/.env`, you MUST restart the Vite dev server for changes to take effect!
+
+**Step 4: Configure MongoDB for Network Access (if needed)**
+
+If MongoDB is on a different machine:
+
+1. **For local MongoDB on same machine**: No changes needed
+2. **For remote MongoDB**: Update `MONGODB_URI` in `server/.env`:
+   ```env
+   MONGODB_URI=mongodb://username:password@192.168.1.50:27017/foodie
+   ```
+3. **For MongoDB Atlas**: Use your Atlas connection string:
+   ```env
+   MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/foodie
+   ```
+
+**Step 5: Start Servers**
+
+The servers will now be accessible from other devices:
+- **Backend**: `http://YOUR_IP:5000` (e.g., `http://192.168.1.100:5000`)
+- **Frontend**: `http://YOUR_IP:5173` (e.g., `http://192.168.1.100:5173`)
+
+**Step 6: Access from Other Devices**
+
+On other devices (phones, tablets, other laptops):
+1. Connect to the same Wi-Fi network
+2. Open browser and go to: `http://YOUR_IP:5173`
+3. The app should load and connect to your backend server
+
+> ⚠️ **Security Note**: This setup is for development only. For production, use proper security measures, HTTPS, and restrict access.
+
+> 🔥 **Firewall**: Make sure your firewall allows connections on ports 5000 and 5173.
 
 ---
 
@@ -508,6 +604,30 @@ npm start
 - Verify `CLIENT_URL` in server `.env` matches frontend URL
 - Check CORS configuration in `server/server.js`
 - Ensure no trailing slashes in URLs
+- For network access, ensure `HOST=0.0.0.0` in server `.env`
+- In development mode, all origins are allowed automatically
+
+</details>
+
+<details>
+<summary><b>Network Access Issues</b></summary>
+
+- **Server not accessible from other devices:**
+  - Ensure `HOST=0.0.0.0` in `server/.env` (not `localhost`)
+  - Check firewall settings - ports 5000 and 5173 must be open
+  - Verify all devices are on the same network
+  - Use your actual IP address, not `localhost` or `127.0.0.1`
+
+- **Client can't connect to server:**
+  - Create `client/.env` with `VITE_API_URL=http://YOUR_IP:5000`
+  - Replace `YOUR_IP` with the server machine's IP address
+  - Restart the Vite dev server after creating `.env` file
+
+- **MongoDB connection fails from remote:**
+  - For local MongoDB: Ensure MongoDB is configured to accept connections
+  - For remote MongoDB: Update `MONGODB_URI` with correct host/IP
+  - For MongoDB Atlas: Use the connection string from Atlas dashboard
+  - Check MongoDB bind IP settings (should allow your network)
 
 </details>
 

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import api from '../utils/api';
 import { formatCurrency } from '../utils/formatCurrency';
+import { getImageUrl } from '../utils/getImageUrl';
 import { useCartStore } from '../store/cartStore';
 import toast from 'react-hot-toast';
 import { FiStar, FiPlus, FiMinus, FiShoppingCart } from 'react-icons/fi';
@@ -105,7 +106,7 @@ const DishDetail = () => {
             className="relative"
           >
             <img
-              src={dish.image || 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=800'}
+              src={getImageUrl(dish.image) || 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=800'}
               alt={dish.name}
               className="w-full h-96 object-cover rounded-xl"
             />

@@ -1,8 +1,19 @@
 import axios from 'axios';
 import { useAuthStore } from '../store/authStore';
 
+// Get API base URL from environment or use proxy
+const getApiBaseURL = () => {
+  const apiUrl = import.meta.env.VITE_API_URL;
+  if (apiUrl) {
+    // If VITE_API_URL is set, use it directly (for network access)
+    return `${apiUrl}/api`;
+  }
+  // Otherwise, use relative path (works with Vite proxy for local development)
+  return '/api';
+};
+
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: getApiBaseURL(),
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
@@ -34,7 +45,8 @@ api.interceptors.response.use(
 
       try {
         // Try to refresh token
-        const response = await axios.post('/api/auth/refresh', {}, { withCredentials: true });
+        const refreshUrl = getApiBaseURL() + '/auth/refresh';
+        const response = await axios.post(refreshUrl, {}, { withCredentials: true });
         const { accessToken } = response.data.data;
         
         useAuthStore.getState().updateUser({ accessToken } as any);

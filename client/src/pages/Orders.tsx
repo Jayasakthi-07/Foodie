@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import api from '../utils/api';
 import { formatCurrency } from '../utils/formatCurrency';
+import { getImageUrl } from '../utils/getImageUrl';
 import { FiClock, FiCheckCircle, FiXCircle, FiTruck } from 'react-icons/fi';
 
 interface Order {
@@ -146,7 +147,7 @@ const Orders = () => {
                   <div className="flex-grow">
                     <div className="flex items-center space-x-4 mb-4">
                       <img
-                        src={order.restaurant.image || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800'}
+                        src={getImageUrl(order.restaurant.image) || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800'}
                         alt={order.restaurant.name}
                         className="w-16 h-16 object-cover rounded-lg"
                       />

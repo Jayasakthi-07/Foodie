@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useCartStore } from '../store/cartStore';
 import { formatCurrency, formatCurrencyWithDecimals } from '../utils/formatCurrency';
+import { getImageUrl } from '../utils/getImageUrl';
 import { FiPlus, FiMinus, FiTrash2, FiShoppingBag } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 
@@ -71,7 +72,7 @@ const Cart = () => {
                     >
                       <div className="flex gap-4">
                         <img
-                          src={item.image || 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=800'}
+                          src={getImageUrl(item.image) || 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=800'}
                           alt={item.name}
                           className="w-24 h-24 object-cover rounded-lg"
                         />

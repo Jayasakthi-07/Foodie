@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import api from '../utils/api';
 import { formatCurrency } from '../utils/formatCurrency';
+import { getImageUrl } from '../utils/getImageUrl';
 import { FiClock, FiStar, FiSearch, FiFilter } from 'react-icons/fi';
 
 interface Restaurant {
@@ -157,7 +158,7 @@ const Restaurants = () => {
                 <Link to={`/menu?restaurant=${restaurant._id}`}>
                   <div className="relative h-48 overflow-hidden rounded-t-xl">
                     <img
-                      src={restaurant.image || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800'}
+                      src={getImageUrl(restaurant.image) || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800'}
                       alt={restaurant.name}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                     />
