@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+import path from 'path';
 import User from '../models/User.model.js';
 import Restaurant from '../models/Restaurant.model.js';
 import Category from '../models/Category.model.js';
@@ -8,7 +10,11 @@ import PromoCode from '../models/PromoCode.model.js';
 import Order from '../models/Order.model.js';
 import { calculateOrderTotal } from '../utils/calculateOrder.utils.js';
 
-dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Load .env file from server directory
+dotenv.config({ path: path.join(__dirname, '..', '.env') });
 
 // Helper functions for generating past activity
 const getRandomElement = (array) => {
