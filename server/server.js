@@ -36,16 +36,43 @@ import { setSocketIO as setScheduledOrdersSocketIO, startScheduledOrdersProcesso
 
 const app = express();
 const httpServer = createServer(app);
+// Support multiple origins for Socket.io
+const socketOrigins = process.env.CLIENT_URL 
+  ? process.env.CLIENT_URL.split(',').map(url => url.trim())
+  : ['http://localhost:5173'];
+
 const io = new Server(httpServer, {
   cors: {
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    origin: process.env.NODE_ENV === 'development' 
+      ? true // Allow all origins in development
+      : socketOrigins,
     credentials: true,
   },
 });
 
 // Middleware
+// Support multiple origins for network access
+const allowedOrigins = process.env.CLIENT_URL 
+  ? process.env.CLIENT_URL.split(',').map(url => url.trim())
+  : ['http://localhost:5173'];
+
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, Postman, etc.)
+    if (!origin) return callback(null, true);
+    
+    // Check if origin is in allowed list
+    if (allowedOrigins.some(allowed => origin === allowed || origin.startsWith(allowed))) {
+      callback(null, true);
+    } else {
+      // In development, allow all origins for easier network access
+      if (process.env.NODE_ENV === 'development') {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    }
+  },
   credentials: true,
 }));
 app.use(express.json());
@@ -114,10 +141,15 @@ mongoose
     
     // Start server
     const PORT = parseInt(process.env.PORT) || 5000;
+    const HOST = process.env.HOST || '0.0.0.0'; // Listen on all network interfaces
     
-    httpServer.listen(PORT, () => {
-      console.log(`🚀 Server running on port ${PORT}`);
+    httpServer.listen(PORT, HOST, () => {
+      console.log(`🚀 Server running on http://${HOST === '0.0.0.0' ? 'localhost' : HOST}:${PORT}`);
       console.log(`📡 Socket.io server initialized`);
+      if (HOST === '0.0.0.0') {
+        console.log(`🌐 Server is accessible from other devices on your network`);
+        console.log(`💡 Use your local IP address to access from other devices`);
+      }
     });
     
     httpServer.on('error', (err) => {
