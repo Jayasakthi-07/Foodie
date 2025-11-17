@@ -69,28 +69,43 @@ const Menu = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
+        // Skip first 10 pages (add 10 to current page)
+        const backendPage = currentPage + 10;
+        
+        // Build query params, only including defined values
+        const params: Record<string, string | number> = {
+          page: backendPage,
+          limit: 20,
+          sortBy,
+          sortOrder,
+        };
+        
+        if (selectedRestaurant) params.restaurant = selectedRestaurant;
+        if (selectedCategory) params.category = selectedCategory;
+        if (search.trim()) params.search = search.trim();
+        if (isVeg !== undefined) params.isVeg = isVeg.toString();
+        if (priceRange[0] > 0) params.minPrice = priceRange[0];
+        if (priceRange[1] < 2000) params.maxPrice = priceRange[1];
+        
         const [dishesRes, categoriesRes] = await Promise.all([
-          api.get('/dishes', {
-            params: {
-              restaurant: selectedRestaurant || undefined,
-              category: selectedCategory || undefined,
-              search: search || undefined,
-              isVeg: isVeg !== undefined ? isVeg.toString() : undefined,
-              sortBy,
-              sortOrder,
-              minPrice: priceRange[0] > 0 ? priceRange[0] : undefined,
-              maxPrice: priceRange[1] < 2000 ? priceRange[1] : undefined,
-              page: currentPage,
-              limit: 20,
-            },
-          }),
+          api.get('/dishes', { params }),
           api.get('/dishes/categories'),
         ]);
 
-        setDishes(dishesRes.data.data.dishes);
-        setCategories(categoriesRes.data.data.categories);
-        if (dishesRes.data.data.pagination) {
-          setPagination(dishesRes.data.data.pagination);
+        // Handle response structure safely
+        const dishesData = dishesRes.data?.data?.dishes || dishesRes.data?.dishes || [];
+        const categoriesData = categoriesRes.data?.data?.categories || categoriesRes.data?.categories || [];
+        
+        setDishes(dishesData);
+        setCategories(categoriesData);
+        if (dishesRes.data?.data?.pagination || dishesRes.data?.pagination) {
+          const backendPagination = dishesRes.data.data?.pagination || dishesRes.data.pagination;
+          // Adjust pagination to account for skipped pages
+          setPagination({
+            ...backendPagination,
+            page: currentPage, // Show user-facing page number
+            pages: Math.max(0, backendPagination.pages - 10), // Reduce total pages by 10
+          });
         }
       } catch (error: any) {
         console.error('Error fetching data:', error);
@@ -301,7 +316,12 @@ const Menu = () => {
           </div>
         ) : dishes.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-charcoal-600 dark:text-charcoal-400 text-lg">No dishes found</p>
+            <p className="text-charcoal-600 dark:text-charcoal-400 text-lg mb-2">No dishes found</p>
+            <p className="text-charcoal-500 dark:text-charcoal-500 text-sm">
+              {selectedCategory || selectedRestaurant || search || isVeg !== undefined || priceRange[0] > 0 || priceRange[1] < 2000
+                ? 'Try adjusting your filters to see more results.'
+                : 'No dishes are available. Please check if the database has been seeded.'}
+            </p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
